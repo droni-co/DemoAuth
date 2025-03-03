@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use Illuminate\Support\Facades\URL;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -28,6 +29,9 @@ class FortifyServiceProvider extends ServiceProvider
    */
   public function boot(): void
   {
+    if($this->app->environment('production')) {
+      URL::forceScheme('https');
+    }
     Fortify::loginView(function () { return view('auth.login'); });
     Fortify::registerView(function () { return view('auth.register'); });
     Fortify::confirmPasswordView(function () { return view('auth.confirm-password'); });
